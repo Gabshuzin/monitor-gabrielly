@@ -36,31 +36,36 @@ Inicie o serviço Nginx: sudo service nginx start
 
 ## 7. Criar o script de monitoramento
 - ```bash 
-  nano ~/monitoramento_nginx.sh
+  nano ~/script_nginx.sh
 Adcione código ao script:
 - ```bash 
-  mkdir -p $LOG_DIR
-  if systemctl is-active -- quiet nginx; then
-  STATUS="ONLINE"
-  MESSAGE="Rodando"
-  echo "$(date '+%Y-%m-%d %H:%M:%S' ) - Nginx - $STATUS - MESSAGE" >> $LOG_DIR/nginx_online. log
+  #!/bin/bash
+  #Variaveis
+  LOG_ONLINE=~/nginx_monitor/script_nginx_online.log
+  LOG_OFFLINE-~/nginx_monitor/script_nginx_offline.log
+
+  #Data e Hora
+  DATA_HORA=$(date '+%Y-%m-%d %H:%M:%S' )
+
+  #Status do Nginx
+  STATUS=$(systemctl is-active nginx)
+
+  if ["$STATTUS" =="active"]; then
+    echo "$DATA_HORA -Nginx -ONLINE - O serviço está funcionando corretamente." >> "$LOG_ONLINE"
   else
-  STATUS="OFFLINE"
-  MESSAGE="Nao esta rodando"
-  echo "$(date '+%Y-%m-%d %H:%M:%S' ) - Nginx - $STATUS - $MESSAGE" >> $LOG_DIR/nginx_offline.log
-  fi
+    echo "$DATA_HORA -Nginx -OFFLINE - O serviço está parado." >> "$LOG_OFFLINE"
 
 Salve e feche o arquivo (CTRL + O, CTRL + X)
 
 ## 8. Tornar o script executável
 Execute o seguinte comando para tornar o script executável:
 - ```bash 
-  chmod +x ~/monitoramento_nginx.sh
+  chmod +x ~/script_nginx.sh
 ## 9. Automatizar a execução do script
 Para automatizar a execução do script a cada 5 minutos, adicione uma entrada no cron
 - ```bash 
   crontab -e
-  */5 * * * * /bin/bash ~/monitoramento_nginx.sh
+  */5 * * * * /bin/bash ~/script_nginx.sh
 ## Conclusão
 Agora você tem um ambiente Linux configurado no Windows com Nginx em execução e um script para monitorar o status do serviço. Sinta-se à vontade para modificar e expandir o projeto conforme necessário
 
